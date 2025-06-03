@@ -10,6 +10,7 @@ SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
 
 # System configuration for user setup
 SYSTEM_BOT_TOKEN = os.getenv("SYSTEM_BOT_TOKEN")  # Main bot token for user setup
+MAIN_BOT_TOKEN = SYSTEM_BOT_TOKEN  # Alias for bot_mode.py compatibility
 SYSTEM_CHANNEL = int(os.getenv("SYSTEM_CHANNEL", "0"))  # System channel ID (optional)
 SYSTEM_CHANNEL_MSG_ID = int(os.getenv("SYSTEM_CHANNEL_MSG_ID", "0"))  # System message ID (optional)
 
