@@ -4,41 +4,40 @@ import os
 # Load environment variables from the .env file, if present
 load_dotenv()
 
-# Telegram API credentials obtained from https://my.telegram.org/auth
-API_ID = int(os.getenv("API_ID"))  # Your Telegram API ID
-API_HASH = os.getenv("API_HASH")  # Your Telegram API Hash
+# Supabase configuration
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
 
-# List of Telegram bot tokens used for file upload/download operations
-BOT_TOKENS = os.getenv("BOT_TOKENS", "").strip(", ").split(",")
-BOT_TOKENS = [token.strip() for token in BOT_TOKENS if token.strip() != ""]
+# System configuration for user setup
+SYSTEM_BOT_TOKEN = os.getenv("SYSTEM_BOT_TOKEN")  # Main bot token for user setup
+SYSTEM_CHANNEL = int(os.getenv("SYSTEM_CHANNEL", "0"))  # System channel ID (optional)
+SYSTEM_CHANNEL_MSG_ID = int(os.getenv("SYSTEM_CHANNEL_MSG_ID", "0"))  # System message ID (optional)
 
-# List of Premium Telegram Account Pyrogram String Sessions used for file upload/download operations
-STRING_SESSIONS = os.getenv("STRING_SESSIONS", "").strip(", ").split(",")
-STRING_SESSIONS = [
-    session.strip() for session in STRING_SESSIONS if session.strip() != ""
-]
+# Website configuration
+WEBSITE_URL = os.getenv("WEBSITE_URL", "http://localhost:8000")
 
-# Chat ID of the Telegram storage channel where files will be stored
-STORAGE_CHANNEL = int(os.getenv("STORAGE_CHANNEL"))  # Your storage channel's chat ID
+# Telegram API credentials (only needed for system bot)
+API_ID = int(os.getenv("API_ID", "0"))  # Default to 0 if not set
+API_HASH = os.getenv("API_HASH", "")  # Default to empty if not set
 
-# Message ID of a file in the storage channel used for storing database backups
-DATABASE_BACKUP_MSG_ID = int(
-    os.getenv("DATABASE_BACKUP_MSG_ID")
-)  # Message ID for database backup
+# File handling configuration
+MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE", "209715200"))  # Default: 200MB
+MAX_SIMULTANEOUS_DOWNLOADS = int(os.getenv("MAX_SIMULTANEOUS_DOWNLOADS", "3"))
 
-# Password used to access the website's admin panel
+# Optional configuration
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin")  # Default to "admin" if not set
 
-# Determine the maximum file size (in bytes) allowed for uploading to Telegram
-# 1.98 GB if no premium sessions are provided, otherwise 3.98 GB
-if len(STRING_SESSIONS) == 0:
-    MAX_FILE_SIZE = 1.98 * 1024 * 1024 * 1024  # 2 GB in bytes
-else:
-    MAX_FILE_SIZE = 3.98 * 1024 * 1024 * 1024  # 4 GB in bytes
+# Validate required configurations
+required_configs = [
+    "SUPABASE_URL",
+    "SUPABASE_ANON_KEY",
+    "SYSTEM_BOT_TOKEN",
+    "WEBSITE_URL"
+]
 
-# Database backup interval in seconds. Backups will be sent to the storage channel at this interval
-DATABASE_BACKUP_TIME = int(
-    os.getenv("DATABASE_BACKUP_TIME", 60)
+for config in required_configs:
+    if not os.getenv(config):
+        raise ValueError(f"Missing required configuration: {config}")
 )  # Default to 60 seconds
 
 # Time delay in seconds before retrying after a Telegram API floodwait error
