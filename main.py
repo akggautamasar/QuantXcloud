@@ -36,6 +36,12 @@ async def lifespan(app: FastAPI):
 app = FastAPI(docs_url=None, redoc_url=None, lifespan=lifespan)
 logger = Logger(__name__)
 
+# Start the main_bot for command handling
+from utils.bot_mode import main_bot
+@app.on_event("startup")
+async def start_main_bot():
+    await main_bot.start()
+
 
 @app.get("/")
 async def home_page():
