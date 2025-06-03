@@ -15,7 +15,6 @@ work_loads = {}
 premium_work_loads = {}
 main_bot = None
 
-
 async def initialize_clients():
     global multi_clients, work_loads, premium_clients, premium_work_loads
     logger.info("Initializing Clients")
@@ -40,7 +39,8 @@ async def initialize_clients():
                     workdir=str(session_cache_path),
                     no_updates=True,  # Disable updates to save memory
                     takeout=True,    # Use takeout session to reduce memory usage
-                    max_concurrent_transmissions=1  # Limit concurrent operations
+                    max_concurrent_transmissions=1,  # Limit concurrent operations
+                    **({"api_id": config.API_ID, "api_hash": config.API_HASH} if config.API_ID and config.API_HASH else {})
                 )
 
                 await client.start()
@@ -57,6 +57,22 @@ async def initialize_clients():
     logger.info("All clients initialized successfully")
 
     return True
+
+async def get_client():
+    """Get a client with the lowest workload"""
+    if not multi_clients:
+        await initialize_clients()
+    
+    index = min(work_loads, key=work_loads.get)
+    work_loads[index] += 1
+    return multi_clients[index]
+
+async def release_client(client):
+    """Release a client and decrease its workload"""
+    for client_id, c in multi_clients.items():
+        if c == client:
+            work_loads[client_id] -= 1
+            break
                     api_id=config.API_ID,
                     api_hash=config.API_HASH,
                     bot_token=token,
