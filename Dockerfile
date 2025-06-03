@@ -25,4 +25,4 @@ ENV PYTHONUNBUFFERED=1 \
 EXPOSE 8000
 
 # Run the FastAPI application
-CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "${PORT:-8000}"]
+CMD ["python", "start_main.py"]
