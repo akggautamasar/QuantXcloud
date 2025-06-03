@@ -73,32 +73,6 @@ async def release_client(client):
         if c == client:
             work_loads[client_id] -= 1
             break
-                    api_id=config.API_ID,
-                    api_hash=config.API_HASH,
-                    bot_token=token,
-                    workdir=session_cache_path,
-                )
-                client.loop = asyncio.get_running_loop()
-                await client.start()
-                await client.send_message(
-                    config.STORAGE_CHANNEL,
-                    f"Started - {type.title()} Client {client_id}",
-                )
-                multi_clients[client_id] = client
-                work_loads[client_id] = 0
-            elif type == "user":
-                client = await Client(
-                    name=str(client_id),
-                    api_id=config.API_ID,
-                    api_hash=config.API_HASH,
-                    session_string=token,
-                    sleep_threshold=config.SLEEP_THRESHOLD,
-                    workdir=session_cache_path,
-                    no_updates=True,
-                ).start()
-                await client.send_message(
-                    config.STORAGE_CHANNEL,
-                    f"Started - {type.title()} Client {client_id}",
                 )
                 premium_clients[client_id] = client
                 premium_work_loads[client_id] = 0
