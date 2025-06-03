@@ -44,16 +44,24 @@ for config in required_configs:
 SLEEP_THRESHOLD = int(os.getenv("SLEEP_THRESHOLD", 60))  # Default to 60 seconds
 
 # Domain to auto-ping and keep the website active
-WEBSITE_URL = os.getenv("WEBSITE_URL", None)
+WEBSITE_URL = os.getenv("WEBSITE_URL", "http://localhost:8000")
 
+# Bot Mode Configuration
+SYSTEM_BOT_TOKEN = os.getenv("SYSTEM_BOT_TOKEN", "")
+if SYSTEM_BOT_TOKEN.strip() == "":
+    raise ValueError("SYSTEM_BOT_TOKEN is required for system configuration")
 
-# For Using TG Drive's Bot Mode
+# Telegram API credentials for system bot
+API_ID = int(os.getenv("API_ID", "0"))  # Default to 0 if not set
+API_HASH = os.getenv("API_HASH", "")  # Default to empty if not set
 
-# Main Bot Token for TG Drive's Bot Mode
-MAIN_BOT_TOKEN = os.getenv("MAIN_BOT_TOKEN", "")
-if MAIN_BOT_TOKEN.strip() == "":
-    MAIN_BOT_TOKEN = None
+# Optional system channel configuration
+SYSTEM_CHANNEL = int(os.getenv("SYSTEM_CHANNEL", "0"))  # Optional, used for system files
+SYSTEM_CHANNEL_MSG_ID = int(os.getenv("SYSTEM_CHANNEL_MSG_ID", "0"))  # Optional, used for system backups
 
-# List of Telegram User IDs who have admin access to the bot mode
-TELEGRAM_ADMIN_IDS = os.getenv("TELEGRAM_ADMIN_IDS", "").strip(", ").split(",")
-TELEGRAM_ADMIN_IDS = [int(id) for id in TELEGRAM_ADMIN_IDS if id.strip() != ""]
+# Admin configuration
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin")  # Default to "admin" if not set
+
+# File handling configuration
+MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE", "209715200"))  # Default: 200MB
+MAX_SIMULTANEOUS_DOWNLOADS = int(os.getenv("MAX_SIMULTANEOUS_DOWNLOADS", "3"))
