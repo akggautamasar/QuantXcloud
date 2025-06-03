@@ -22,10 +22,9 @@ async def initialize_clients():
     session_cache_path = Path(f"./cache")
     session_cache_path.parent.mkdir(parents=True, exist_ok=True)
 
-    all_tokens = dict((i, t) for i, t in enumerate(config.BOT_TOKENS, start=1))
-    all_sessions = dict(
-        (i, s) for i, s in enumerate(config.STRING_SESSIONS, start=len(all_tokens) + 1)
-    )
+    # Initialize main bot with SYSTEM_BOT_TOKEN
+    all_tokens = {1: config.SYSTEM_BOT_TOKEN}
+    all_sessions = {}  # We're not using string sessions in this version
 
     async def start_client(client_id, token, type):
         try:
