@@ -31,8 +31,8 @@ main_bot = Client(
     name="main_bot",
     api_id=config.API_ID,
     api_hash=config.API_HASH,
-    bot_token=config.MAIN_BOT_TOKEN,
-    sleep_threshold=config.SLEEP_THRESHOLD,
+    bot_token=config.MAIN_BOT_TOKEN,  # Now always matches SYSTEM_BOT_TOKEN
+    sleep_threshold=getattr(config, "SLEEP_THRESHOLD", 60),
     workdir=session_cache_path,
 )
 
