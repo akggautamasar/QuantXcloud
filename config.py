@@ -14,6 +14,9 @@ MAIN_BOT_TOKEN = SYSTEM_BOT_TOKEN  # Alias for bot_mode.py compatibility
 SYSTEM_CHANNEL = int(os.getenv("SYSTEM_CHANNEL", "0"))  # System channel ID (optional)
 SYSTEM_CHANNEL_MSG_ID = int(os.getenv("SYSTEM_CHANNEL_MSG_ID", "0"))  # System message ID (optional)
 
+# Telegram admin user IDs (comma-separated in env, e.g. '12345,67890')
+TELEGRAM_ADMIN_IDS = [int(x) for x in os.getenv("TELEGRAM_ADMIN_IDS", "").split(",") if x.strip().isdigit()]
+
 # Website configuration
 WEBSITE_URL = os.getenv("WEBSITE_URL", "https://atomic-selene-airlazy-3b04c42d.koyeb.app")
 
