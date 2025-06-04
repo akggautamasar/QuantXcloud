@@ -10,6 +10,8 @@ from fastapi import FastAPI, HTTPException, Request, File, UploadFile, Form, Res
 from fastapi.responses import FileResponse, JSONResponse
 from config import ADMIN_PASSWORD, MAX_FILE_SIZE, STORAGE_CHANNEL
 from utils.clients import initialize_clients
+from utils.directoryHandler import loadDriveData
+from utils.bot_mode import main_bot # Ensure main_bot is imported for lifespan
 from utils.directoryHandler import getRandomID
 from utils.extra import auto_ping_website, convert_class_to_dict, reset_cache_dir
 from utils.streamer import media_streamer
@@ -27,6 +29,12 @@ async def lifespan(app: FastAPI):
     # Initialize the clients
     await initialize_clients()
 
+    # Initialize DRIVE_DATA and BOT_MODE, and start the main_bot client
+    await loadDriveData()
+
+    # Start the main_bot's idle task to keep it running for commands
+    asyncio.create_task(main_bot.idle())
+
     # Start the website auto ping task
     asyncio.create_task(auto_ping_website())
 
@@ -36,13 +44,8 @@ async def lifespan(app: FastAPI):
 app = FastAPI(docs_url=None, redoc_url=None, lifespan=lifespan)
 logger = Logger(__name__)
 
-# Start the main_bot for command handling
-from utils.bot_mode import main_bot
-@app.on_event("startup")
-async def start_main_bot():
-    await main_bot.start()
-    import asyncio
-    asyncio.create_task(main_bot.idle())
+# The main_bot is now started and its idle task scheduled within the lifespan manager.
+# The old @app.on_event("startup") handler for main_bot has been removed.
 
 
 @app.get("/")
