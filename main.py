@@ -41,6 +41,8 @@ from utils.bot_mode import main_bot
 @app.on_event("startup")
 async def start_main_bot():
     await main_bot.start()
+    import asyncio
+    asyncio.create_task(main_bot.idle())
 
 
 @app.get("/")
